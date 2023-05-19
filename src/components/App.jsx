@@ -34,28 +34,28 @@ export const App = () => {
   useEffect(() => {
     if (searchQuery === '') return;
 
-    (async () => {
+    async function featch() {
       try {
         setIsLoader(() => true);
         const { data } = await fetchImgs(page, searchQuery);
+        setGallery(prevState => [...prevState, ...data.hits]);
         if (data.hits.length === 0) {
           return Notify.failure('Sorry, but nothing found');
         }
 
         if (
           (data.total > data.hits.length && data.total - page * 12 >= 0) ||
-          gallery.length === 0
+          (page === 1 && searchQuery !== '')
         ) {
           setShowBtn(() => true);
         }
-
-        setGallery(() => [...gallery, ...data.hits]);
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoader(() => false);
       }
-    })();
+    }
+    featch();
   }, [searchQuery, page]);
 
   return (

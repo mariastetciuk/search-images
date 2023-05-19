@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import css from './Modal.module.css';
 
@@ -8,21 +8,24 @@ export const Modal = ({ largeURL, description, closeModal }) => {
       closeModal();
     }
   };
-  const handlePressESC = event => {
-    if (event.code === 'Escape') {
-      closeModal();
-    }
-  };
+
+  const handlePressESC = useCallback(() => {
+    return event => {
+      if (event.code === 'Escape') {
+        closeModal();
+      }
+    };
+  }, [closeModal]);
 
   useEffect(() => {
     document.addEventListener('keydown', handlePressESC);
-  }, []);
+  }, [handlePressESC]);
 
   useEffect(() => {
     return () => {
       document.removeEventListener('keydown', handlePressESC);
     };
-  }, []);
+  }, [handlePressESC]);
 
   return (
     <div className={css.overlay} onClick={handleOverlayClick}>
@@ -38,36 +41,3 @@ Modal.propTypes = {
   description: PropTypes.string.isRequired,
   closeModal: PropTypes.func.isRequired,
 };
-
-// export class Modal extends Component {
-//   componentDidMount() {
-//     document.addEventListener('keydown', this.handlePressESC);
-//   }
-
-//   componentWillUnmount() {
-//     document.removeEventListener('keydown', this.handlePressESC);
-//   }
-
-//   handleOverlayClick = event => {
-//     if (event.currentTarget === event.target) {
-//       this.props.closeModal();
-//     }
-//   };
-
-//   handlePressESC = event => {
-//     if (event.code === 'Escape') {
-//       this.props.closeModal();
-//     }
-//   };
-
-//   render() {
-//     const { largeURL, description } = this.props;
-//     return (
-//       <div className={css.overlay} onClick={this.handleOverlayClick}>
-//         <div className={css.modal}>
-//           <img src={largeURL} alt={description} />
-//         </div>
-//       </div>
-//     );
-//   }
-// }
