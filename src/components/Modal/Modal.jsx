@@ -18,9 +18,11 @@ export const Modal = ({ largeURL, description, closeModal }) => {
     document.addEventListener('keydown', handlePressESC);
   }, []);
 
-  // useEffect(() => {
-  //   return document.removeEventListener('keydown', handlePressESC);
-  // }, [handlePressESC]);
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('keydown', handlePressESC);
+    };
+  }, []);
 
   return (
     <div className={css.overlay} onClick={handleOverlayClick}>
