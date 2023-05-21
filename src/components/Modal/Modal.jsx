@@ -9,19 +9,19 @@ export const Modal = ({ largeURL, description, closeModal }) => {
     }
   };
 
-  const handlePressESC = event => {
-    if (event.code === 'Escape') {
-      closeModal();
-    }
-  };
-
   useEffect(() => {
+    const handlePressESC = event => {
+      if (event.code === 'Escape') {
+        closeModal();
+      }
+    };
+
     document.addEventListener('keydown', handlePressESC);
 
     return () => {
       document.removeEventListener('keydown', handlePressESC);
     };
-  });
+  }, [closeModal]);
 
   return (
     <div className={css.overlay} onClick={handleOverlayClick}>
